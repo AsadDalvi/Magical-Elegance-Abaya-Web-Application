@@ -1,0 +1,59 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="checkout-container">
+    <h1 class="checkout-title">Checkout</h1>
+
+    {% if cart_items %}
+        <form method="post" class="checkout-form">
+            {% csrf_token %}
+            <div class="form-group">
+                <label for="name">Name:</label><br>
+                <input type="text" id="name" name="name" required>
+            </div>
+
+            <div class="form-group">
+                <label for="email">Email:</label><br>
+                <input type="email" id="email" name="email" required>
+            </div>
+
+            <div class="form-group">
+                <label for="address">Address:</label><br>
+                <textarea id="address" name="address" rows="3" required></textarea>
+            </div>
+
+            <div class="form-group">
+                <label for="phone">Phone Number:</label><br>
+                <input type="tel" id="phone" name="phone" required>
+            </div>
+
+            <button type="submit" class="btn">Place Order</button>
+        </form>
+
+        <div class="cart-summary">
+            <h3>Cart Summary:</h3>
+            <ul>
+                {% for item in cart_items %}
+                    <li>
+                        {{ item.product.name }} — 
+                        Qty: {{ item.quantity }},
+                        Size: {{ item.size }},
+                        Color: {{ item.color }} —
+                        {{ item.subtotal }} OMR
+                    </li>
+                {% endfor %}
+            </ul>
+            <p><strong>Total: {{ total }} OMR</strong></p>
+        </div>
+
+    {% else %}
+        <p class="no-orders">Your cart is empty.</p>
+    {% endif %}
+
+    <div class="checkout-links">
+        <a href="{% url 'cart' %}" class="btn small">← Back to Cart</a>
+        <a href="{% url 'home' %}" class="btn small">← Home</a>
+    </div>
+</div>
+{% endblock %}

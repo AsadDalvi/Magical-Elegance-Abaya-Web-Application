@@ -1,0 +1,81 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="payment-section">
+    <h1>Choose Your Payment Method</h1>
+
+    <form method="post" id="payment-form">
+        {% csrf_token %}
+        <div class="payment-option">
+            <label>
+                <input type="radio" name="payment_method" value="paypal" onchange="togglePaymentFields(this.value)"> 
+                <img src="{% static 'store/images/paypal.png' %}" alt="PayPal" width="80">
+            </label>
+            <label>
+                <input type="radio" name="payment_method" value="visa" onchange="togglePaymentFields(this.value)"> 
+                <img src="{% static 'store/images/visa.png' %}" alt="Visa" width="80">
+            </label>
+            <label>
+                <input type="radio" name="payment_method" value="cod" onchange="togglePaymentFields(this.value)"> 
+                <img src="{% static 'store/images/cod.png' %}" alt="Cash" width="80">
+            </label>
+        </div>
+
+        <div id="card-fields" style="display: none; margin-top: 20px;">
+            <input type="text" name="card_name" id="card_name" placeholder="Cardholder Name" required pattern="[A-Za-z ]+" title="Only letters allowed">
+
+            <input type="text" name="card_number" id="card_number" placeholder="Card Number" maxlength="19" required>
+
+            <input type="text" name="expiry" id="expiry" placeholder="MM/YY" maxlength="5" required>
+
+            <input type="text" name="cvv" id="cvv" placeholder="CVV" maxlength="3" required>
+        </div>
+
+        <button type="submit" class="btn">Confirm Payment</button>
+    </form>
+</div>
+
+<script>
+    function togglePaymentFields(method) {
+        const cardSection = document.getElementById("card-fields");
+        cardSection.style.display = (method === "visa" || method === "paypal") ? "block" : "none";
+    }
+
+    // Allow only COD to proceed to thank you page
+    document.getElementById("payment-form").addEventListener("submit", function (e) {
+        const selectedMethod = document.querySelector('input[name="payment_method"]:checked');
+        if (!selectedMethod || selectedMethod.value !== "cod") {
+            e.preventDefault();
+            alert("Only Cash on Delivery is supported currently. Please choose 'Cash on Delivery' to proceed.");
+        }
+    });
+
+    // Format Card Number: #### #### #### ####
+    document.getElementById("card_number").addEventListener("input", function (e) {
+        let value = e.target.value.replace(/\D/g, "").substring(0, 16);
+        let formatted = value.match(/.{1,4}/g);
+        e.target.value = formatted ? formatted.join(" ") : "";
+    });
+
+    // Format Expiry: MM/YY
+    document.getElementById("expiry").addEventListener("input", function (e) {
+        let value = e.target.value.replace(/\D/g, "").substring(0, 4);
+        if (value.length >= 3) {
+            e.target.value = value.substring(0, 2) + '/' + value.substring(2, 4);
+        } else {
+            e.target.value = value;
+        }
+    });
+
+    // Only allow numbers for CVV
+    document.getElementById("cvv").addEventListener("input", function (e) {
+        e.target.value = e.target.value.replace(/\D/g, "").substring(0, 3);
+    });
+
+    // Only allow letters and space for Cardholder Name
+    document.getElementById("card_name").addEventListener("input", function (e) {
+        e.target.value = e.target.value.replace(/[^A-Za-z ]/g, "");
+    });
+</script>
+{% endblock %}

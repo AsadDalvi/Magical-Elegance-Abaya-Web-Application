@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="order-history-container">
+    <h1 class="order-history-title">Your Order History</h1>
+
+    {% if orders %}
+        <ul class="order-list">
+            {% for order in orders %}
+                <li>
+                    <strong>{{ order.product.name }}</strong><br>
+                    Qty: {{ order.quantity }} | Size: {{ order.size }} | Color: {{ order.color }}<br>
+                    Status: <strong>{{ order.get_status_display }}</strong><br>
+                    Ordered on: {{ order.created_at|date:"Y-m-d H:i" }}
+                    <hr>
+                </li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p class="no-orders">You haven’t placed any orders yet.</p>
+    {% endif %}
+
+    <a href="{% url 'home' %}" class="back-home-link">← Back to Home</a>
+</div>
+{% endblock %}

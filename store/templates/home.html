@@ -1,0 +1,54 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<section class="welcome">
+    <h1>Welcome to <span class="brand">Magical Elegance</span></h1>
+    <p>Explore our luxurious collection of Abayas & Scarves.</p>
+    <a href="{% url 'product_list' %}" class="btn product-btn">View Products</a>
+</section>
+
+
+<!--  About Us Section -->
+<section class="about-us">
+    <h2>About Us</h2>
+    <p>
+        <strong> Magical Elegance</strong> is a luxury abaya designer house based in Al Amerat, Oman, offering elegant, custom-made abayas for women of all ages. We blend classic and modern styles using high-quality fabrics sourced globally. With personalized designs and home delivery, we ensure every woman feels beautifully confident and comfortable.
+    </p>
+    <p><strong>Working Hours:</strong> Saturday – Thursday, 11:00 AM – 11:00 PM</p>
+    <p><strong>Contact:</strong> 📞 +968-9799 8200 | +968 7847 8441 
+        <br>
+        <strong>Email: </strong> ✉️ elegantly.om@gmail.com</p>
+
+    <div class="map-container">
+        <iframe 
+            src="https://www.google.com/maps/embed?pb=!1m17!1m12!1m3!1d3659.6475370356247!2d58.48553087532737!3d23.473174978860627!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m2!1m1!2zMjPCsDI4JzIzLjQiTiA1OMKwMjknMTcuMiJF!5e0!3m2!1sen!2som!4v1746360082522!5m2!1sen!2som" 
+            width="100%" 
+            height="250" 
+            style="border:0;" 
+            allowfullscreen="" 
+            loading="lazy">
+        </iframe>
+    </div>
+</section>
+
+
+<section class="feedback">
+    <h2>Leave Us Your Feedback</h2>
+    <form method="post" action="{% url 'submit_feedback' %}">
+        {% csrf_token %}
+        <div class="feedback-box">
+            <textarea name="message" rows="4" placeholder="Write your feedback here..." required></textarea>
+            <button type="submit">Submit</button>
+        </div>
+    </form>
+
+    {% if messages %}
+        <ul class="messages">
+            {% for message in messages %}
+                <li>{{ message }}</li>
+            {% endfor %}
+        </ul>
+    {% endif %}
+</section>
+{% endblock %}

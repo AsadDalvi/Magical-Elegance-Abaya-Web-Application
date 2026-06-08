@@ -1,0 +1,42 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="product-detail">
+    <h1 class="detail-title">{{ product.name }}</h1>
+
+    {% if product.image %}
+        <div class="detail-image-container">
+            <img src="{{ product.image.url }}" alt="{{ product.name }}" class="detail-image">
+        </div>
+    {% endif %}
+
+    <p class="detail-price"><strong>Price:</strong> {{ product.price }} OMR</p>
+    <p class="detail-category"><strong>Category:</strong> {{ product.category }}</p>
+    <p class="detail-description">{{ product.description }}</p>
+
+    <form action="{% url 'add_to_cart' product.id %}" method="post" class="add-to-cart-form">
+        {% csrf_token %}
+        <label for="size">Size:</label>
+        <select name="size" id="size" required>
+            <option value="S">Small</option>
+            <option value="M">Medium</option>
+            <option value="L">Large</option>
+            <option value="XL">Extra Large</option>
+        </select>
+
+        <label for="color">Color:</label>
+        <input type="text" name="color" placeholder="e.g. Black, Navy" required>
+
+        <label for="qty">Quantity:</label>
+        <input type="number" name="quantity" id="qty" value="1" min="1" required>
+
+        <button type="submit" class="btn">Add to Cart</button>
+    </form>
+
+    <div class="detail-links">
+        <a href="{% url 'product_list' %}" class="btn small">← Back to Products</a>
+        <a href="{% url 'home' %}" class="btn small">← Back to Home</a>
+    </div>
+</div>
+{% endblock %}

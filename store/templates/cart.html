@@ -1,0 +1,38 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="cart-container">
+    <h1 class="cart-title">Your Cart</h1>
+
+    {% if cart_items %}
+        <form method="post">
+            {% csrf_token %}
+            <ul class="cart-items">
+                {% for item in cart_items %}
+                    <li>
+                        {{ item.product.name }} — 
+                        <input type="number" name="quantity_{{ item.product.id }}" value="{{ item.quantity }}" min="0">
+                        × {{ item.product.price }} = {{ item.subtotal }} OMR
+                        <br><small>(Set to 0 to remove)</small>
+                    </li>
+                {% endfor %}
+            </ul>
+            <button type="submit" class="cart-btn">Update Cart</button>
+        </form>
+
+        <p class="cart-total">Total: {{ total }} OMR</p>
+
+        <form action="{% url 'checkout' %}" method="get">
+            <button type="submit" class="cart-btn">Proceed to Checkout</button>
+        </form>
+    {% else %}
+        <p class="no-orders">Your cart is empty.</p>
+    {% endif %}
+
+    <div class="cart-links">
+        <a href="{% url 'product_list' %}">← Continue Shopping</a> |
+        <a href="{% url 'home' %}">← Back to Home</a>
+    </div>
+</div>
+{% endblock %}

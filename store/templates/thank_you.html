@@ -1,0 +1,10 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="thank-you-section">
+    <h1>Thank You, {{ name }}!</h1>
+    <p>Your order has been placed successfully. We will contact you soon.</p>
+    <a href="{% url 'home' %}">← Back to Home</a>
+</div>
+{% endblock %}

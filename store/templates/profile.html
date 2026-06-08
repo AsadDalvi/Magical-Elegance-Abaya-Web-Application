@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="profile-container">
+
+    <h1>Welcome, {{ user.username }}!</h1>
+    <p>Email: {{ user.email }}</p>
+
+    <ul>
+        <li><a href="{% url 'password_change' %}">Change Password</a></li>
+        <li><a href="{% url 'order_history' %}">View Order History</a></li>
+        <li>
+            <form method="post" action="{% url 'logout' %}">
+                {% csrf_token %}
+                <button type="submit">Logout</button>
+            </form>
+        </li>
+    </ul>
+
+    {% if user.is_superuser %}
+        <div class="admin-tools">
+            <h3>Admin Tools</h3>
+            <a href="{% url 'generate_report_pdf' %}" target="_blank">📄 Download Sales Report (PDF)</a>
+        </div>
+    {% endif %}
+
+    <a href="{% url 'home' %}" class="back-link">← Back to Home</a>
+
+</div>
+{% endblock %}

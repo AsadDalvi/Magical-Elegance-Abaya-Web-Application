@@ -1,0 +1,120 @@
+{% block content %}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <pdf:nextpage name="landscape" />
+    <style>
+        @page landscape {
+            size: A4 landscape;
+            margin: 30pt;
+        }
+
+        body {
+            font-family: 'Helvetica', sans-serif;
+            padding: 20px;
+            font-size: 12px;
+        }
+
+        h1 {
+            text-align: center;
+            color: #9A7E55;
+            font-size: 18px;
+            margin-bottom: 25px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            table-layout: fixed;
+            word-wrap: break-word;
+        }
+
+        th, td {
+            border: 1px solid #ccc;
+            padding: 6px 8px;
+            text-align: center;
+            vertical-align: top;
+            word-break: break-word;
+        }
+
+        th {
+            background-color: #9A7E55;
+            color: white;
+        }
+
+        tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+
+        tr:hover {
+            background-color: #f1f1f1;
+        }
+
+        th:nth-child(3),
+        td:nth-child(3) {
+            width: 160px; /* Email column wider */
+        }
+
+        th:nth-child(4),
+        td:nth-child(4) {
+            width: 100px; /* Phone */
+        }
+
+        th:nth-child(5),
+        td:nth-child(5) {
+            width: 180px; /* Address */
+        }
+
+        th:nth-child(10),
+        td:nth-child(10) {
+            width: 100px; /* Payment Method */
+        }
+    </style>
+</head>
+<body>
+
+<h1>Sales Report – Magical Elegance</h1>
+
+<table>
+    <thead>
+        <tr>
+            <th>Order ID</th>
+            <th>Name</th>
+            <th>Email</th>
+            <th>Phone</th>
+            <th>Address</th>
+            <th>Product</th>
+            <th>Qty</th>
+            <th>Size</th>
+            <th>Color</th>
+            <th>Payment</th>
+            <th>Paid?</th>
+            <th>Status</th>
+            <th>Date</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for order in orders %}
+        <tr>
+            <td>{{ order.id }}</td>
+            <td>{{ order.customer_name }}</td>
+            <td>{{ order.email }}</td>
+            <td>{{ order.phone }}</td>
+            <td>{{ order.address }}</td>
+            <td>{{ order.product.name }}</td>
+            <td>{{ order.quantity }}</td>
+            <td>{{ order.size }}</td>
+            <td>{{ order.color }}</td>
+            <td>{{ order.payment_method|default:"-" }}</td>
+            <td>{{ order.is_paid|yesno:"Yes,No" }}</td>
+            <td>{{ order.get_status_display }}</td>
+            <td>{{ order.created_at|date:"Y-m-d" }}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+</body>
+</html>
+{% endblock %}

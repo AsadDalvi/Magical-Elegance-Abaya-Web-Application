@@ -1,0 +1,70 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="product-page">
+
+    <!-- Page Title -->
+    <h1 class="product-title">Our Collection</h1>
+
+    <!-- Filter Form -->
+    <form method="get" class="filter-form">
+        <div class="filter-group">
+            <label for="category">Category:</label>
+            <select name="category" id="category">
+                <option value="">All</option>
+                <option value="abaya" {% if selected_category == 'abaya' %}selected{% endif %}>Abaya</option>
+                <option value="scarf" {% if selected_category == 'scarf' %}selected{% endif %}>Scarf</option>
+            </select>
+        </div>
+
+        <div class="filter-group">
+            <label for="color">Color:</label>
+            <select name="color" id="color">
+                <option value="">All</option>
+                <option value="black" {% if selected_color == 'black' %}selected{% endif %}>Black</option>
+                <option value="gray" {% if selected_color == 'gray' %}selected{% endif %}>Gray</option>
+                <option value="navy" {% if selected_color == 'navy' %}selected{% endif %}>Navy</option>
+                <option value="white" {% if selected_color == 'white' %}selected{% endif %}>White</option>
+                <option value="beige" {% if selected_color == 'beige' %}selected{% endif %}>Beige</option>
+            </select>
+        </div>
+
+        <div class="filter-group">
+            <label for="size">Size:</label>
+            <select name="size" id="size">
+                <option value="">All</option>
+                <option value="S" {% if selected_size == 'S' %}selected{% endif %}>Small</option>
+                <option value="M" {% if selected_size == 'M' %}selected{% endif %}>Medium</option>
+                <option value="L" {% if selected_size == 'L' %}selected{% endif %}>Large</option>
+                <option value="XL" {% if selected_size == 'XL' %}selected{% endif %}>XL</option>
+            </select>
+        </div>
+
+        <button type="submit" class="btn">Filter</button>
+    </form>
+
+    <!-- Product Grid -->
+    <div class="product-grid">
+        {% for product in products %}
+            <div class="product-card">
+                {% if product.image %}
+                    <img src="{{ product.image.url }}" alt="{{ product.name }}">
+                {% endif %}
+                <h3>{{ product.name }}</h3>
+                <p>{{ product.description }}</p>
+                <p><strong>{{ product.price }} OMR</strong></p>
+                <a href="{% url 'product_detail' product.id %}" class="btn small">View Details</a>
+            </div>
+        {% empty %}
+            <p>No products available.</p>
+        {% endfor %}
+    </div>
+
+    <!-- Back Button -->
+    <div style="margin-top: 60px;">
+        <a href="{% url 'home' %}" class="btn">← Back to Home</a>
+    </div>
+
+</div>
+{% endblock %}
